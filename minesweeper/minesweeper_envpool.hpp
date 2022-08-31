@@ -3,6 +3,8 @@
 #include "envpool/core/async_envpool.h"
 #include "envpool/core/env.h"
 
+#include <iostream>
+
 namespace MineSweeper
 {
 
@@ -81,8 +83,8 @@ namespace MineSweeper
             State state = Allocate();
             std::vector<int> visible_map(rows_ * columns_, -1);
             // clang-format off
-        for (size_t i = 0; i < visible_map.size(); ++i) 
-            if (masks_[i]) visible_map[i] = map_[i];
+            for (size_t i = 0; i < visible_map.size(); ++i) 
+                if (masks_[i]) visible_map[i] = map_[i];
             // clang-format on
             for (int idx = 0, i = 0; i < rows_; ++i)
                 for (int j = 0; j < columns_; ++j, ++idx)
@@ -98,7 +100,7 @@ namespace MineSweeper
             return row * columns_ + col;
         }
 
-        inline std::tuple<int> toCoord(int idx)
+        inline std::tuple<int, int> toCoord(int idx)
         {
             return std::make_tuple(idx / columns_, idx % columns_);
         }
@@ -108,8 +110,8 @@ namespace MineSweeper
             std::vector<int> mine_locs;
             mine_locs.reserve(rows_ * columns_ - 1);
             // clang-format off
-        for (int i = 0; i < rows_ * columns_; i++)
-            if (i != action) mine_locs.push_back(i);
+            for (int i = 0; i < rows_ * columns_; i++)
+                if (i != action) mine_locs.push_back(i);
             // clang-format on
             std::shuffle(mine_locs.begin(), mine_locs.end(), gen_);
             for (int i = 0; i < mines_; i++)
@@ -122,14 +124,14 @@ namespace MineSweeper
                     prefix_sum[i][j] = (map_[toIdx(i, j)] == -1) +
                                        (i > 0 ? prefix_sum[i - 1][j] : 0) +
                                        (j > 0 ? prefix_sum[i][j - 1] : 0) -
-                                       (i > 0 && j > 0 ?: prefix_sum[i - 1][j - 1] : 0);
+                                       (i > 0 && j > 0 ? prefix_sum[i - 1][j - 1] : 0);
             for (int i = 0; i < rows_; i++)
                 for (int j = 0; j < columns_; j++)
                     if (map_[toIdx(i, j)] != -1)
-                        map_[toIdx(i, j)] = prefix_sum[min(i + 1, rows_)][min(j + 1, columns_)] +
+                        map_[toIdx(i, j)] = prefix_sum[std::min(i + 1, rows_)][std::min(j + 1, columns_)] +
                                             (i > 2 && j > 2 ? prefix_sum[i - 2][j - 2] : 0) -
-                                            (i > 2 ? prefix_sum[i - 2][min(j + 1, columns_)] : 0) -
-                                            (j > 2 ? prefix_sum[min(i + 1, rows_)][j - 2] : 0);
+                                            (i > 2 ? prefix_sum[i - 2][std::min(j + 1, columns_)] : 0) -
+                                            (j > 2 ? prefix_sum[std::min(i + 1, rows_)][j - 2] : 0);
 #ifdef ENVPOOL_TEST
             displayMap();
 #endif
@@ -193,7 +195,7 @@ namespace MineSweeper
                 is_first_step_ = false;
             }
 
-            done_ = expandMap(toCoord(act));
+            done_ = expandMap(act);
             writeState(done_ ? -1.0 : 1.0);
         }
     };
