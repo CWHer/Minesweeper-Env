@@ -20,6 +20,17 @@ cc_library(
     ],
 )
 
+py_test(
+    name = "minesweeper_envpool_test",
+    srcs = ["minesweeper_envpool_test.py"],
+    data = ["minesweeper_envpool.so"],
+    deps = [
+        requirement("tqdm"),
+        requirement("numpy"),
+        requirement("absl-py"),
+    ],
+)
+
 pybind_extension(
     name = "minesweeper_envpool",
     srcs = ["minesweeper_envpool.cc"],
