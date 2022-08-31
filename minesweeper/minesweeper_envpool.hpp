@@ -64,7 +64,8 @@ namespace MineSweeper
                 for (int j = 0; j < columns_; ++j)
                 {
                     auto x = map_[toIdx(i, j)];
-                    std::cout << (x == -1 ? '*' : x);
+                    x == -1 ? std::cout << "*" : std::cout << x;
+                    std::cout << ' ';
                 }
                 std::cout << '\n';
             }
@@ -72,7 +73,12 @@ namespace MineSweeper
             for (int i = 0; i < rows_; ++i)
             {
                 for (int j = 0; j < columns_; ++j)
-                    std::cout << (masks_[toIdx(i, j)] ? '#' : map_[toIdx(i, j)]);
+                {
+                    !masks_[toIdx(i, j)]
+                        ? std::cout << "#"
+                        : std::cout << map_[toIdx(i, j)];
+                    std::cout << ' ';
+                }
                 std::cout << '\n';
             }
             std::cout << std::endl;
@@ -80,6 +86,10 @@ namespace MineSweeper
 
         void writeState(float reward)
         {
+#ifdef ENVPOOL_TEST
+            displayMap();
+#endif
+
             State state = Allocate();
             std::vector<int> visible_map(rows_ * columns_, -1);
             // clang-format off
@@ -128,13 +138,10 @@ namespace MineSweeper
             for (int i = 0; i < rows_; i++)
                 for (int j = 0; j < columns_; j++)
                     if (map_[toIdx(i, j)] != -1)
-                        map_[toIdx(i, j)] = prefix_sum[std::min(i + 1, rows_)][std::min(j + 1, columns_)] +
+                        map_[toIdx(i, j)] = prefix_sum[std::min(i + 1, rows_ - 1)][std::min(j + 1, columns_ - 1)] +
                                             (i > 2 && j > 2 ? prefix_sum[i - 2][j - 2] : 0) -
-                                            (i > 2 ? prefix_sum[i - 2][std::min(j + 1, columns_)] : 0) -
-                                            (j > 2 ? prefix_sum[std::min(i + 1, rows_)][j - 2] : 0);
-#ifdef ENVPOOL_TEST
-            displayMap();
-#endif
+                                            (i > 2 ? prefix_sum[i - 2][std::min(j + 1, columns_ - 1)] : 0) -
+                                            (j > 2 ? prefix_sum[std::min(i + 1, rows_ - 1)][j - 2] : 0);
         }
 
         bool expandMap(int index)
