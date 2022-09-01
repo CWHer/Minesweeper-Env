@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# vscode config
+.vscode/
+
+# python cache
+__pycache__/
+
+# envpool source
+envpool/
