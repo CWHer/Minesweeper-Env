@@ -45,8 +45,8 @@ namespace MineSweeper
     class MineSweeperEnv : public Env<MineSweeperEnvSpec>
     {
     protected:
-        int rows_, columns_, mines_;
-
+        const int rows_, columns_, mines_;
+        int n_steps_; // remaining steps to end the game
         std::vector<int> map_;
         std::vector<int> masks_;
         bool is_first_step_;
@@ -152,6 +152,7 @@ namespace MineSweeper
             if (map_[index] == -1)
                 return true; // boom!!!
             masks_[index] = 1;
+            n_steps_--;
 
             if (map_[index] == 0)
             {
@@ -186,6 +187,7 @@ namespace MineSweeper
 
         void Reset() override
         {
+            n_steps_ = rows_ * columns_ - mines_;
             is_first_step_ = true;
             done_ = false;
             writeState(0.0);
@@ -202,8 +204,9 @@ namespace MineSweeper
                 is_first_step_ = false;
             }
 
-            done_ = expandMap(act);
-            writeState(done_ ? -1.0 : 1.0);
+            done_ = expandMap(act) || n_steps_ == 0;
+            writeState(!done_ ? 1.0
+                              : (n_steps_ == 0 ? 10.0 : -10.0));
         }
     };
 
