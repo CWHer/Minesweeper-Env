@@ -179,6 +179,7 @@ namespace MineSweeper
               rows_(spec.config["rows"_]),
               columns_(spec.config["columns"_]),
               mines_(spec.config["mines"_]),
+              n_steps_(rows_ * columns_ - mines_),
               map_(rows_ * columns_, 0),
               masks_(rows_ * columns_, 0),
               is_first_step_(false), done_(true) {}
@@ -188,6 +189,8 @@ namespace MineSweeper
         void Reset() override
         {
             n_steps_ = rows_ * columns_ - mines_;
+            std::fill(map_.begin(), map_.end(), 0);
+            std::fill(masks_.begin(), masks_.end(), 0);
             is_first_step_ = true;
             done_ = false;
             writeState(0.0);
@@ -196,6 +199,7 @@ namespace MineSweeper
         void Step(const Action &action) override
         {
             int act = action["action"_];
+            int last_step = n_steps_;
 
             if (is_first_step_)
             {
@@ -204,8 +208,8 @@ namespace MineSweeper
                 is_first_step_ = false;
             }
 
-            done_ = expandMap(act) || n_steps_ == 0;
-            writeState(!done_ ? 1.0
+            done_ = !masks_[act] && expandMap(act) || n_steps_ == 0;
+            writeState(!done_ ? last_step - n_steps_
                               : (n_steps_ == 0 ? 10.0 : -10.0));
         }
     };
