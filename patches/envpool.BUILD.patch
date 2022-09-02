@@ -1,0 +1,20 @@
+diff --git a/envpool/BUILD b/envpool/BUILD
+index cb901f2..d90aac1 100644
+--- a/envpool/BUILD
++++ b/envpool/BUILD
+@@ -23,6 +23,7 @@ py_library(
+         "//envpool/mujoco:mujoco_gym_registration",
+         "//envpool/toy_text:toy_text_registration",
+         "//envpool/vizdoom:vizdoom_registration",
++        "//envpool/minesweeper:minesweeper_registration",
+     ],
+ )
+ 
+@@ -40,6 +41,7 @@ py_library(
+         "//envpool/python",
+         "//envpool/toy_text",
+         "//envpool/vizdoom",
++        "//envpool/minesweeper",
+     ],
+ )
+ 

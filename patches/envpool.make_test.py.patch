@@ -1,0 +1,19 @@
+diff --git a/envpool/make_test.py b/envpool/make_test.py
+index 9225bb9..872cd60 100644
+--- a/envpool/make_test.py
++++ b/envpool/make_test.py
+@@ -169,6 +169,14 @@ class _MakeTest(absltest.TestCase):
+         "WalkerWalk-v1",
+       ]
+     )
++    
++  def test_make_minesweeper(self) -> None:
++    self.check_step([
++      "Minesweeper-Beginner",
++      "Minesweeper-Intermediate",
++      "Minesweeper-Expert",
++    ])
++  
+ 
+ 
+ if __name__ == "__main__":

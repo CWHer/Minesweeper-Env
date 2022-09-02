@@ -1,0 +1,12 @@
+diff --git a/setup.cfg b/setup.cfg
+index 8e3e69f..a39e766 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -44,6 +44,7 @@ envpool = atari/*.so
+     mujoco/assets*/*.xml
+     mujoco/assets*/*/*.xml
+     box2d/*.so
++    minesweeper/*.so
+ 
+ [yapf]
+ based_on_style = yapf
