@@ -35,7 +35,6 @@ It is based on the classic game Minesweeper. The goal of the agent is to clear t
 ### Dependencies
 
 - `bazel`
-
 - `conda`
 
 ### Installing
@@ -49,8 +48,9 @@ cd Minesweeper-Env && ./build.sh
 
 ### Executing program
 
-`env_test.py` gives a usage example of `Minesweeper-Env`. It creates a `MinesweeperEnv` and runs a random agent on it.
+`env_test.py` gives a simple example of `Minesweeper-Env`. It creates a `MinesweeperEnv` and runs a random agent on it.
 
+For more instrutions, please refer to [envpool doc](https://envpool.readthedocs.io/en/latest/) or [gym doc](https://www.gymlibrary.dev/).
 
 ## Version History
 
