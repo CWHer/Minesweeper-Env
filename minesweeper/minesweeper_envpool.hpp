@@ -208,9 +208,9 @@ namespace MineSweeper
                 is_first_step_ = false;
             }
 
-            done_ = (!masks_[act] && expandMap(act)) || n_steps_ == 0;
-            writeState(!done_ ? last_step - n_steps_
-                              : (n_steps_ == 0 ? 10.0 : -10.0));
+            done_ = masks_[act] || expandMap(act) || n_steps_ == 0;
+            writeState(step_reward_ * (last_step - n_steps_) +
+                       final_reward_ * done_ * (n_steps_ == 0 ? 1.0 : -1.0));
         }
     };
 
