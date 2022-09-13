@@ -15,8 +15,8 @@ namespace MineSweeper
         static decltype(auto) DefaultConfig()
         {
             return MakeDict(
-                "rows"_.Bind(16), "columns"_.Bind(16),
-                "mines"_.Bind(40));
+                "rows"_.Bind(16), "columns"_.Bind(16), "mines"_.Bind(40),
+                "step_reward"_.Bind(0.1), "final_reward"_.Bind(10.0));
         }
 
         template <typename Config>
@@ -46,7 +46,8 @@ namespace MineSweeper
     {
     protected:
         const int rows_, columns_, mines_;
-        int n_steps_; // remaining steps to end the game
+        const float step_reward_, final_reward_; // reward scale factor
+        int n_steps_;                            // remaining steps to end the game
         std::vector<int> map_;
         std::vector<int> masks_;
         bool is_first_step_;
@@ -179,6 +180,8 @@ namespace MineSweeper
               rows_(spec.config["rows"_]),
               columns_(spec.config["columns"_]),
               mines_(spec.config["mines"_]),
+              step_reward_(spec.config["step_reward"_]),
+              final_reward_(spec.config["final_reward"_]),
               n_steps_(rows_ * columns_ - mines_),
               map_(rows_ * columns_, 0),
               masks_(rows_ * columns_, 0),
