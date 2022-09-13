@@ -18,18 +18,10 @@ class _MineSweeperEnvPoolTest(absltest.TestCase):
 
     def test_config(self) -> None:
         ref_config_keys = [
-            "num_envs",
-            "batch_size",
-            "num_threads",
-            "max_num_players",
-            "thread_affinity_offset",
-            "base_path",
-            "seed",
-            "gym_reset_return_info",
-            "rows",
-            "columns",
-            "mines",
-        ]
+            "num_envs", "batch_size", "num_threads",
+            "max_num_players", "thread_affinity_offset",
+            "base_path", "seed", "gym_reset_return_info",
+            "rows", "columns", "mines", "step_reward", "final_reward"]
         default_conf = _MineSweeperEnvSpec._default_config_values
         self.assertTrue(isinstance(default_conf, tuple))
         config_keys = _MineSweeperEnvSpec._config_keys

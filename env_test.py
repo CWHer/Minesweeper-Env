@@ -26,13 +26,12 @@ if __name__ == "__main__":
     env.async_reset()
     env.action_space.seed(seed)
 
+    action = np.array(
+        [env.action_space.sample()
+         for _ in range(batch_size)])
     t = time.time()
     for _ in tqdm.trange(total_step):
         info = env.recv()[-1]
-        # HACK: generate actions may cause overhead
-        action = np.array(
-            [env.action_space.sample()
-             for _ in range(batch_size)])
         env.send(action, info["env_id"])
     duration = time.time() - t
 
